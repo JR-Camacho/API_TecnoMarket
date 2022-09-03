@@ -13,9 +13,9 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Product::all();
+        return Product::search($request->buscar);
     }
 
     public function myproducts($id){
@@ -56,9 +56,9 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show($id)
     {
-        //
+        return Product::findOrFail($id);
     }
 
     /**

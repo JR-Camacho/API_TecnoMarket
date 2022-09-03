@@ -42,7 +42,7 @@ class UserController extends Controller
 
     public function delete_user($id)
     {
-        $user = User::findOrFail($id)->delete();
+        $user = User::findOrFail($id);
         if($user->profile_url != ''){
             unlink('images/users/'.$user->profile_url);
             Product::where('user_id', $id)->delete();
@@ -51,5 +51,9 @@ class UserController extends Controller
             Product::where('user_id', $id)->delete();
             return $user->delete();
         }
+    }
+
+    public function show($id){
+        return User::findOrFail($id);
     }
 }

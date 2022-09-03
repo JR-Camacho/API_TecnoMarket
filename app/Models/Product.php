@@ -9,5 +9,15 @@ class Product extends Model
 {
     use HasFactory;
 
-   protected $fillable = ['name', 'description', 'price', 'user_id', 'category', 'front_url'];
+    protected $fillable = ['name', 'description', 'price', 'user_id', 'category', 'front_url'];
+
+    public static function search($query = '')
+    {
+        if (!$query) {
+            return self::all();
+        }
+        return self::where('name', 'like', "%$query%")
+            ->orWhere('category', 'like', "%$query%")
+            ->get();
+    }
 }

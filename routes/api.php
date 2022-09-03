@@ -34,10 +34,12 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('myproducts/{id}', [ProductController::class, 'myproducts']);
     Route::post('create', [ProductController::class, 'store']);
     Route::get('edit/{id}', [ProductController::class, 'edit']);
-    Route::put('update', [ProductController::class, 'update']);
+    Route::post('update', [ProductController::class, 'update']);
     Route::delete('delete/{id}', [ProductController::class, 'destroy']);
     Route::get('user', [UserController::class, 'user']);
     Route::post('update-user', [UserController::class, 'update_user']);
     Route::delete('delete-user/{id}', [UserController::class, 'delete_user']);
+    Route::get('show-product/{id}', [ProductController::class, 'show']);
+    Route::get('show-user/{id}', [UserController::class, 'show']);
 });
 
