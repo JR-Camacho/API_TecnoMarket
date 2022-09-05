@@ -60,37 +60,4 @@ class AuthController extends Controller
             'message' => 'logged out'
         ];
     }
-
-    // public function user()
-    // {
-    //     return auth()->user();
-    // }
-   
-    // public function update_user(Request $request, $id)
-    // {
-    //     $user = User::findOrFail($id);
-    //     $request->validate(['name' => 'required|max:30', 'surnames' => 'max:40', 'password' => 'required|min:8', 'description' => 'max:255']);
-    //     $data = $request->all();
-    //     if($photo = $request->file('profile_url')){
-    //         $photo_name = time() . '-' . $photo->getClientOriginalName();
-    //         $photo->move('images/users', $photo_name);
-    //         $data['profile_url'] = $photo_name;
-    //     }
-    //     $data['name'] = $request->name;
-    //     $data['password'] = Hash::make($request->password);
-    //     return $user->update($data);
-    // }
-
-    // public function delete_user($id)
-    // {
-    //     $user = User::findOrFail($id)->delete();
-    //     if($user->profile_url != ''){
-    //         unlink('images/users/'.$user->profile_url);
-    //         Product::where('user_id', $id)->delete();
-    //         return $user->delete();
-    //     } else{
-    //         Product::where('user_id', $id)->delete();
-    //         return $user->delete();
-    //     }
-    // }
 }

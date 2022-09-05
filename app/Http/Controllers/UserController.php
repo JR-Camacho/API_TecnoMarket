@@ -24,7 +24,7 @@ class UserController extends Controller
     public function update_user(Request $request)
     {
         $user = User::findOrFail($request->id);
-        $request->validate(['name' => 'required|max:30', 'surnames' => 'max:40', 'password' => 'required|min:8', 'description' => 'max:255']);
+        $request->validate(['name' => 'required|max:30', 'surnames' => 'max:40', 'password' => 'required|min:8', 'description' => 'max:255', 'profile_url' => 'image|max:2000']);
         $data = $request->all();
         if($photo = $request->file('profile_url')){
             $photo_name = time() . '-' . $photo->getClientOriginalName();

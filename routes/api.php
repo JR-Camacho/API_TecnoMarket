@@ -28,6 +28,10 @@ Route::post('login', [AuthController::class, 'login']);
 
 Route::get('products', [ProductController::class, 'index']);
 
+Route::get('show-product/{id}', [ProductController::class, 'show']);
+
+Route::get('show-user/{id}', [UserController::class, 'show']);
+
 //Las rutas dentro de esta funcion estan protegidas para que no se pueda acceder a ella sin estar autenticados
 Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('logout', [AuthController::class, 'logout']);
@@ -39,7 +43,5 @@ Route::middleware(['auth:sanctum'])->group(function(){
     Route::get('user', [UserController::class, 'user']);
     Route::post('update-user', [UserController::class, 'update_user']);
     Route::delete('delete-user/{id}', [UserController::class, 'delete_user']);
-    Route::get('show-product/{id}', [ProductController::class, 'show']);
-    Route::get('show-user/{id}', [UserController::class, 'show']);
 });
 

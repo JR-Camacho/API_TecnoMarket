@@ -40,7 +40,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(['name' => 'required|max:65', 'description' => 'max:255', 'front_url' => 'image']);
+        $request->validate(['name' => 'required|max:65', 'description' => 'required|max:255', 'front_url' => 'image|max:1000', 'price' => 'required']);
         $data = $request->all();
         if($photo = $request->file('front_url')){
             $photo_name = time() . '_'  . $photo->getClientOriginalName();
@@ -82,7 +82,7 @@ class ProductController extends Controller
     public function update(Request $request)
     {
         $product= Product::findOrFail($request->id);
-        $request->validate(['name' => 'required|max:65', 'description' => 'max:255', 'front_url' => 'image']);
+        $request->validate(['name' => 'required|max:65', 'description' => 'required|max:255', 'front_url' => 'image|max:1000', 'price' => 'required']);
         $data = $request->all();
         if($photo = $request->file('front_url')){
             $photo_name = time() . '_'  . $photo->getClientOriginalName();
