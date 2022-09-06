@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\User;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -27,13 +28,18 @@ class UserController extends Controller
         $request->validate(['name' => 'required|max:30', 'surnames' => 'max:40', 'password' => 'required|min:8', 'description' => 'max:255', 'profile_url' => 'image|max:2000']);
         $data = $request->all();
         if($photo = $request->file('profile_url')){
-            $photo_name = time() . '-' . $photo->getClientOriginalName();
-            $photo->move('images/users', $photo_name);
-            $data['profile_url'] = $photo_name;
-
+           
             if($user->profile_url != ''){
-                unlink('images/users/'.$user->profile_url);
+                $id_image = $user->id_image;
+                Cloudinary::destroy($id_image);
             }
+
+            $obj = Cloudinary::upload($photo->getRealPath(), ['folder' => 'users']);
+            $id_image = $obj->getPublicId();
+            $url = $obj->getSecurePath();
+
+            $data['profile_url'] = $url;
+            $data['id_image'] = $id_image;
         }
         $data['password'] = Hash::make($request->password);
 
@@ -44,13 +50,11 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         if($user->profile_url != ''){
-            unlink('images/users/'.$user->profile_url);
-            Product::where('user_id', $id)->delete();
-            return $user->delete();
-        } else{
-            Product::where('user_id', $id)->delete();
-            return $user->delete();
-        }
+            $id_image = $user->id_image;
+            Cloudinary::destroy($id_image);
+        } 
+        Product::where('user_id', $id)->delete();
+        return $user->delete();
     }
 
     public function show($id){

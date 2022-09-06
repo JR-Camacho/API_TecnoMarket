@@ -9,7 +9,7 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'price', 'user_id', 'category', 'front_url'];
+    protected $fillable = ['name', 'description', 'price', 'user_id', 'category', 'front_url', 'id_image'];
 
     public static function search($query = '')
     {
@@ -18,6 +18,6 @@ class Product extends Model
         }
         return self::where('name', 'like', "%$query%")
             ->orWhere('category', 'like', "%$query%")
-            ->get();
+            ->orderBy('id', 'desc')->get();
     }
 }

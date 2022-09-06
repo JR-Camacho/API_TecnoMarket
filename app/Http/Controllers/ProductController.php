@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+
 
 class ProductController extends Controller
 {
@@ -43,9 +45,13 @@ class ProductController extends Controller
         $request->validate(['name' => 'required|max:65', 'description' => 'required|max:255', 'front_url' => 'image|max:1000', 'price' => 'required']);
         $data = $request->all();
         if($photo = $request->file('front_url')){
-            $photo_name = time() . '_'  . $photo->getClientOriginalName();
-            $photo->move('images/products', $photo_name);
-            $data['front_url'] = $photo_name;
+
+            $obj = Cloudinary::upload($photo->getRealPath(), ['folder' => 'products']);
+            $url = $obj->getSecurePath();
+            $id_image = $obj->getPublicId();
+
+            $data['front_url'] = $url;
+            $data['id_image'] = $id_image;
         }
         return Product::create($data); 
     }
@@ -85,14 +91,20 @@ class ProductController extends Controller
         $request->validate(['name' => 'required|max:65', 'description' => 'required|max:255', 'front_url' => 'image|max:1000', 'price' => 'required']);
         $data = $request->all();
         if($photo = $request->file('front_url')){
-            $photo_name = time() . '_'  . $photo->getClientOriginalName();
-            $photo->move('images/products', $photo_name);
-            $data['front_url'] = $photo_name;
 
             if($product->front_url != ''){
-                unlink('images/products/'.$product->front_url);
+                $id_image = $product->id_image;
+                Cloudinary::destroy($id_image);
             }
+
+            $obj = Cloudinary::upload($photo->getRealPath(), ['folder' => 'products']);
+            $id_image = $obj->getPublicId();
+            $url = $obj->getSecurePath();
+
+            $data['front_url'] = $url;
+            $data['id_image'] = $id_image;
         }
+
         return $product->update($data);
     }
 
@@ -106,10 +118,9 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         if($product->front_url != ''){
-            unlink('images/products/'.$product->front_url);
-            return $product->delete();
-        } else{
-            return $product->delete();
-        }
+            $id_image = $product->id_image;
+            Cloudinary::destroy($id_image);
+        } 
+        return $product->delete();
     }
 }
