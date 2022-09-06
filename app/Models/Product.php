@@ -17,7 +17,6 @@ class Product extends Model
             return self::all();
         }
         return self::where('name', 'like', "%$query%")
-            ->orWhere('category', 'like', "%$query%")
-            ->orderBy('id', 'desc')->get();
+            ->orWhere('category', 'like', "%$query%")->get();
     }
 }
